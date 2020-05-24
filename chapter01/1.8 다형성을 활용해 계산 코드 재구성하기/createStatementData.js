@@ -36,6 +36,10 @@ class PerformanceCalculator {
     }
 }
 
+function createPerformanceCalculator(aPerformance, play) {
+    return new PerformanceCalculator(aPerformance, play);
+}
+
 module.exports = function createStatementData(invoice, plays) { // 중간 데이터 생성을 전담
     const statementData = {};
     statementData.customer = invoice.customer;
@@ -45,7 +49,7 @@ module.exports = function createStatementData(invoice, plays) { // 중간 데이
     return statementData;
 
     function enrichPerformance(aPerformance) {
-        const calculator = new PerformanceCalculator(aPerformance, playFor(aPerformance)); // 공연료 계산기 생성
+        const calculator = createPerformanceCalculator(aPerformance, playFor(aPerformance)); // 생성자대신 팩토리함수 사용
         const result = Object.assign({}, aPerformance); // 얕은 복사 수행
         result.play = calculator.play; // 중간 데이터에 연극 정보를 저장
         result.amount = calculator.amount; // aountFor() 대신 계산기의 함수 이용
