@@ -26,6 +26,14 @@ class PerformanceCalculator {
         }
         return result; // 함수 안에서 값이 바뀌는 변수 반환
     }
+
+    get volumeCredits() {
+        let result = 0;
+        result += Math.max(this.performance.audience - 30, 0);
+        if ('comedy' === this.play.type)
+            result += Math.floor(this.performance.audience / 5);
+        return result;
+    }
 }
 
 module.exports = function createStatementData(invoice, plays) { // 중간 데이터 생성을 전담
@@ -40,8 +48,8 @@ module.exports = function createStatementData(invoice, plays) { // 중간 데이
         const calculator = new PerformanceCalculator(aPerformance, playFor(aPerformance)); // 공연료 계산기 생성
         const result = Object.assign({}, aPerformance); // 얕은 복사 수행
         result.play = calculator.play; // 중간 데이터에 연극 정보를 저장
-        result.amount = amountFor(result);
-        result.volumeCredits = volumeCreditsFor(result);
+        result.amount = calculator.amount; // aountFor() 대신 계산기의 함수 이용
+        result.volumeCredits = calculator.volumeCredits;
         return result;
     }
 
@@ -54,11 +62,7 @@ module.exports = function createStatementData(invoice, plays) { // 중간 데이
     }
 
     function volumeCreditsFor(aPerformance) {
-        let result = 0;
-        result += Math.max(aPerformance.audience - 30, 0);
-        if ('comedy' === aPerformance.play.type)
-            result += Math.floor(aPerformance.audience / 5);
-        return result;
+        return new PerformanceCalculator(aPerformance, playFor(aPerformance)).volumeCredits;
     }
 
     function totalAmount(data) {
