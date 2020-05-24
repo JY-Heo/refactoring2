@@ -5,22 +5,8 @@ class PerformanceCalculator {
         this.play = aPlay;
     }
 
-    get amount() { // amountFor() 함수의 코드를 계산기 클래스로 복사
-        let result = 0;
-        switch (this.play.type) { // amountFor 함수가 매개변수로 받던 정보를 계산기 필드에서 바로 얻음
-            case 'tragedy':
-                throw '오류 발생'; // tragedy 공연료는 TragedyCalculator를 이용하도록 유도하기
-            case 'comedy':
-                result = 30000;
-                if (this.performance.audience > 20) {
-                    result += 10000 + 500 * (this.performance.audience - 20);
-                }
-                result += 300 * this.performance.audience;
-                break;
-            default:
-                throw new Error(`알 수 없는 장르: ${this.play.type}`);
-        }
-        return result; // 함수 안에서 값이 바뀌는 변수 반환
+    get amount() {
+        throw new Error('서브 클래스에서 처리하세요');
     }
 
     get volumeCredits() {
@@ -43,7 +29,14 @@ class TragedyCalculator extends PerformanceCalculator {
 }
 
 class ComedyCalculator extends PerformanceCalculator {
-
+    get amount() {
+        let result = 30000;
+        if (this.performance.audience > 20) {
+            result += 10000 + 500 * (this.performance.audience - 20);
+        }
+        result += 300 * this.performance.audience;
+        return result;
+    }
 }
 
 function createPerformanceCalculator(aPerformance, aPlay) {
