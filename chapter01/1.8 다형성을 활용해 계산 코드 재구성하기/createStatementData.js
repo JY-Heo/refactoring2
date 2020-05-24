@@ -10,11 +10,7 @@ class PerformanceCalculator {
     }
 
     get volumeCredits() {
-        let result = 0;
-        result += Math.max(this.performance.audience - 30, 0);
-        if ('comedy' === this.play.type)
-            result += Math.floor(this.performance.audience / 5);
-        return result;
+        return Math.max(this.performance.audience - 30, 0);
     }
 }
 
@@ -36,6 +32,10 @@ class ComedyCalculator extends PerformanceCalculator {
         }
         result += 300 * this.performance.audience;
         return result;
+    }
+
+    get volumeCredits() { // 포인트 계산 방식이 조금 다른 처리 로직을 서브클래스로 내리기
+        return super.volumeCredits + Math.floor(this.performance.audience / 5);
     }
 }
 
