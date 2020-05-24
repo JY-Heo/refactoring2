@@ -57,14 +57,6 @@ module.exports = function createStatementData(invoice, plays) { // 중간 데이
         return plays[aPerformance.playID];
     }
 
-    function amountFor(aPerformance) { // 값이 바뀌지 않는 변수는 매개변수로 전달
-        return new PerformanceCalculator(aPerformance, playFor(aPerformance)).amount; // amountFor()도 계산기를 이용하도록 수정
-    }
-
-    function volumeCreditsFor(aPerformance) {
-        return new PerformanceCalculator(aPerformance, playFor(aPerformance)).volumeCredits;
-    }
-
     function totalAmount(data) {
         return data.performances.reduce((total, p) => total + p.amount, 0); // for 반복문을 파이프라인으로
     }
